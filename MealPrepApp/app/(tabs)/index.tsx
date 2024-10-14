@@ -16,12 +16,12 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title" style={styles.titleText}>Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
+        <ThemedText type="subtitle" style={styles.subtitleText}>Step 1: Try it</ThemedText>
+        <ThemedText style={styles.bodyText}>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
           Press{' '}
           <ThemedText type="defaultSemiBold">
@@ -31,14 +31,14 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
+        <ThemedText type="subtitle" style={styles.subtitleText}>Step 2: Explore</ThemedText>
+        <ThemedText style={styles.bodyText}>
           Tap the Explore tab to learn more about what's included in this starter app.
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
+        <ThemedText type="subtitle" style={styles.subtitleText}>Step 3: Get a fresh start</ThemedText>
+        <ThemedText style={styles.bodyText}>
           When you're ready, run{' '}
           <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
           <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
@@ -66,5 +66,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  titleText: {
+    color: '#FFFFFF', // White color for the title
+  },
+  subtitleText: {
+    color: '#FFFFFF', // White color for subtitles
+  },
+  bodyText: {
+    color: '#FFFFFF', // White color for body text
   },
 });
