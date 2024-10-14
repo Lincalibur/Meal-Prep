@@ -3,24 +3,24 @@ name: Log Folder Structure
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main # or Demo, whichever branch you're working on
 
 jobs:
-  build:
+  list-structure:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Log folder structure
-        run: node get-folder-structure.js
+    - name: List all files and directories
+      run: |
+        ls -R --ignore='node_modules'
