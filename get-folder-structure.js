@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const targetDir = './'; // Change this if needed to your project folder
-const outputFilePath = './folder-structure.txt';
 
 function getFolderStructure(dir, prefix = '') {
   const files = fs.readdirSync(dir);
@@ -16,16 +15,13 @@ function getFolderStructure(dir, prefix = '') {
     }
 
     if (stat.isDirectory()) {
-      fs.appendFileSync(outputFilePath, `${prefix}${file}/\n`);
+      console.log(`${prefix}${file}/`);
       getFolderStructure(filePath, `${prefix}    `); // Recursively handle subfolders
     } else {
-      fs.appendFileSync(outputFilePath, `${prefix}${file}\n`);
+      console.log(`${prefix}${file}`);
     }
   });
 }
 
-// Clear the file first
-fs.writeFileSync(outputFilePath, 'Project Folder Structure\n\n');
+console.log('Project Folder Structure:\n');
 getFolderStructure(targetDir);
-
-console.log(`Folder structure saved to ${outputFilePath}`);
