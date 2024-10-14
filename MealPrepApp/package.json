@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "get-folder-structure": "node get-folder-structure.js"
   },
   "jest": {
     "preset": "jest-expo"
