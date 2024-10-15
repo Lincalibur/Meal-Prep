@@ -1,5 +1,6 @@
 // ./MealPrepApp/database/databaseHelper.js
 import { getDatabase, ref, set, get, child } from 'firebase/database'; // Import Firebase functions
+import { database } from '../firebaseConfig'; // Firebase config import
 
 const db = getDatabase(); // Initialize your database
 

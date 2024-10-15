@@ -1,7 +1,7 @@
 // ./MealPrepApp/app/(tabs)/ShoppingList.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import { database } from '../../firebaseConfig'; // Import database from firebaseConfig
 
 const ShoppingList = () => {
@@ -53,6 +53,7 @@ const ShoppingList = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#121212'
   },
   header: {
     fontSize: 24,
