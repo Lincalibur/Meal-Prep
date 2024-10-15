@@ -1,100 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, FlatList, StyleSheet } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// ./MealPrepApp/app/(tabs)/ShoppingList.tsx
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { database } from '../../firebaseConfig'; // Import database from firebaseConfig
 
-interface ShoppingItem {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-}
+const ShoppingList = () => {
+  const [items, setItems] = useState<{ name: string; price: number }[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-export default function ShoppingList() {
-  const [itemName, setItemName] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState('');
-  const [shoppingList, setShoppingList] = useState<ShoppingItem[]>([]);
+  useEffect(() => {
+    const itemsRef = ref(database, 'inventory/');
+    
+    const unsubscribe = onValue(itemsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const itemList = Object.keys(data).map(key => ({
+          name: key,
+          ...data[key],
+        }));
+        setItems(itemList);
+        calculateTotal(itemList);
+      }
+    });
 
-  // Function to add an item to the shopping list
-  const addItem = () => {
-    if (!itemName || !price) return;
-    const newItem: ShoppingItem = {
-      id: Math.random().toString(),
-      name: itemName,
-      quantity,
-      price: parseFloat(price),
-    };
-    setShoppingList([...shoppingList, newItem]);
-    setItemName('');
-    setQuantity(1);
-    setPrice('');
+    return () => unsubscribe();
+  }, []);
+
+  const calculateTotal = (itemList: { price: number }[]) => {
+    const total = itemList.reduce((sum, item) => sum + item.price, 0);
+    setTotalPrice(total);
   };
 
-  // Function to remove an item from the shopping list
-  const removeItem = (id: string) => {
-    setShoppingList(shoppingList.filter(item => item.id !== id));
-  };
+  const renderItem = ({ item }: { item: { name: string; price: number } }) => (
+    <Text style={styles.itemText} key={item.name}>
+      {item.name}: ${item.price.toFixed(2)}
+    </Text>
+  );
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Shopping List</ThemedText>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Item Name"
-        value={itemName}
-        onChangeText={setItemName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Quantity"
-        keyboardType="numeric"
-        value={String(quantity)}
-        onChangeText={text => setQuantity(Number(text))}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Price"
-        keyboardType="numeric"
-        value={price}
-        onChangeText={setPrice}
-      />
-      
-      <Button title="Add Item" onPress={addItem} />
-      
+    <View style={styles.container}>
+      <Text style={styles.header}>Shopping List:</Text>
       <FlatList
-        data={shoppingList}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <ThemedView style={styles.item}>
-            <ThemedText>{item.name} (x{item.quantity}) - ${item.price.toFixed(2)}</ThemedText>
-            <Button title="Remove" onPress={() => removeItem(item.id)} />
-          </ThemedView>
-        )}
+        data={items}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.name}
       />
-    </ThemedView>
+      <Text style={styles.totalText}>Total Estimated Price: ${totalPrice.toFixed(2)}</Text>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
+    backgroundColor: '#121212'
   },
-  input: {
-    height: 40,
-    color: '#FFFFFF',
-    borderColor: '#ccc',
-    borderWidth: 1,
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 8,
-    padding: 8,
+    color: 'white',
   },
-  item: {
-    flexDirection: 'row',
-    color: '#FFFFFF',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+  itemText: {
+    fontSize: 18,
+    color: 'lightgrey',
+  },
+  totalText: {
+    marginTop: 12,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'yellow',
   },
 });
+
+export default ShoppingList;
