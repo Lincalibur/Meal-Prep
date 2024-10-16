@@ -12,6 +12,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "MealPrepApp/env.d.ts",
-    ".expo/types/**/*.ts"
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }
